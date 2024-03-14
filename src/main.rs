@@ -59,7 +59,7 @@ fn your_info(host: &str) {
             Ordering::Less => {
                 println!("[{name}:] Haha.. I'm older than you think!");
                 min_age = guess_age + 1;
-                match guess_age.cmp(&100) {
+                match guess_age.cmp(&max_age) {
                     Ordering::Equal => {
                         println!("[{host}:] Leave it, You must be very old then!");
                         break;

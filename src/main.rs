@@ -47,6 +47,22 @@ fn your_info(host: &str) {
         let guess_age = rand::thread_rng().gen_range(min_age..=max_age);
         println!("[{host}:] Is it {guess_age}?");
         trials = trials + 1;
+        match age.cmp(&0) {
+            Ordering::Equal => {}
+            Ordering::Greater => {}
+            Ordering::Less => {
+                println!("[{host}:] That's not possible!");
+                break;
+            }
+        }
+        match age.cmp(&100) {
+            Ordering::Equal => {}
+            Ordering::Greater => {
+                println!("[{host}:] Leave it, You must be very old then!");
+                break;
+            }
+            Ordering::Less => {}
+        }
         match guess_age.cmp(&age) {
             Ordering::Equal => {
                 println!("[{name}:] Bingo...! It took you {trials} tries.");

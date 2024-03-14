@@ -1,4 +1,5 @@
 use rand::Rng;
+use std::cmp::Ordering;
 use std::io;
 fn main() {
     // using constants we cannot reassign the value, or redeclare
@@ -27,6 +28,12 @@ fn main() {
     println!("Hi {} How old are you?", name);
     // if we don't add use std::io at the top, we can directly access the same functionality prefixing std:: as used below
     std::io::stdin().read_line(&mut age).expect("age");
-    let age = rand::thread_rng().gen_range(20..=50);
-    println!("Okay! I thought it would be {age}.");
+    let age: u32 = age.trim().parse().expect("Please type a number!");
+    let guess_age = rand::thread_rng().gen_range(20..=50);
+    println!("Okay! I thought it would be {guess_age}.");
+    match guess_age.cmp(&age) {
+        Ordering::Equal => println!("See I was right!"),
+        Ordering::Greater => println!("You look Older than your Age!"),
+        Ordering::Less => println!("Wow, You have maintained well..."),
+    }
 }

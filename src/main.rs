@@ -40,34 +40,75 @@ fn your_info(host: &str) {
     let age: u32 = age.trim().parse().expect("Please type a number!");
     println!("...Your silence, makes {host} nervous");
 
-    let mut min_age = 0;
-    let mut max_age = 100;
+    let mut min_age: u32 = 0;
+    let mut max_age: u32 = 100;
     let mut trials: u32 = 0;
+    const USE_MATCH: bool = false;
     loop {
-        let guess_age = rand::thread_rng().gen_range(min_age..=max_age);
+        let guess_age: u32 = rand::thread_rng().gen_range(min_age..=max_age);
         println!("[{host}:] Is it {guess_age}?");
         trials = trials + 1;
-        match guess_age.cmp(&age) {
-            Ordering::Equal => {
-                println!("[{name}:] Bingo...! It took you {trials} tries.");
-                break;
-            }
-            Ordering::Greater => {
-                println!("[{name}:] Do I look that old?");
-                max_age = guess_age - 1;
-            }
-            Ordering::Less => {
-                println!("[{name}:] Haha.. I'm older than you think!");
-                min_age = guess_age + 1;
-                match guess_age.cmp(&max_age) {
-                    Ordering::Equal => {
-                        println!("[{host}:] Leave it, You must be very old then!");
-                        break;
-                    }
-                    Ordering::Greater => {}
-                    Ordering::Less => {}
+        let result = if USE_MATCH {
+            age_guess_match((guess_age, age, name, host, trials, (min_age, max_age)))
+        } else {
+            age_guess_if_else(guess_age, age, (min_age, max_age))
+        };
+        if result.0 {
+            break;
+        }
+        min_age = result.1 .0;
+        max_age = result.1 .1;
+    }
+}
+
+fn age_guess_match(data: (u32, u32, &str, &str, u32, (u32, u32))) -> (bool, (u32, u32)) {
+    let guess_age: u32 = data.0;
+    let age: u32 = data.1;
+    let name: &str = data.2;
+    let host: &str = data.3;
+    let trials: u32 = data.4;
+    let mut range: (u32, u32) = data.5;
+    let mut _stop: bool = false;
+    match guess_age.cmp(&age) {
+        Ordering::Equal => {
+            println!("[{name}:] Bingo...! It took you {trials} tries.");
+            _stop = true;
+        }
+        Ordering::Greater => {
+            println!("[{name}:] Do I look that old?");
+            range.1 = guess_age - 1;
+        }
+        Ordering::Less => {
+            println!("[{name}:] Haha.. I'm older than you think!");
+            range.0 = guess_age + 1;
+            match guess_age.cmp(&range.1) {
+                Ordering::Equal => {
+                    println!("[{host}:] Leave it, You must be very old then!");
+                    _stop = true;
                 }
+                Ordering::Greater => {}
+                Ordering::Less => {}
             }
         }
     }
+    (_stop, range)
+}
+
+fn age_guess_if_else(guess_age: u32, age: u32, mut range: (u32, u32)) -> (bool, (u32, u32)) {
+    let mut _stop: bool = false;
+    if guess_age == age {
+        println!("[You:] Bingo...! It took you some tries.");
+        _stop = true;
+    } else if guess_age > age {
+        println!("[You:] Do I look that old?");
+        range.1 = guess_age - 1;
+    } else {
+        println!("[You:] Haha.. I'm older than you think!");
+        range.0 = guess_age - 1;
+        if guess_age == range.1 {
+            println!("[Host:] Leave it, You must be very old then!");
+            _stop = true;
+        }
+    }
+    return (_stop, range);
 }

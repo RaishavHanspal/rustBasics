@@ -31,14 +31,12 @@ fn prologue() {
 
 fn your_info(host: &str) {
     let mut name: String = String::new();
-    let mut age = String::new();
     println!("[{host}:] What's your name?");
     io::stdin().read_line(&mut name).expect("name");
     let name = name.trim();
     println!("[{host}:] Hi {}, How old are you?", name);
     // if we don't add use std::io at the top, we can directly access the same functionality prefixing std:: as used below
-    std::io::stdin().read_line(&mut age).expect("age");
-    let age: u32 = age.trim().parse().expect("Please type a number!");
+    let age = get_age_input();
     println!("...Your silence, makes {host} nervous");
 
     let mut min_age: u32 = 0;
@@ -62,6 +60,13 @@ fn your_info(host: &str) {
         min_age = result.1 .0;
         max_age = result.1 .1;
     }
+}
+
+fn get_age_input() -> u32 {
+    let mut age = String::new();
+    std::io::stdin().read_line(&mut age).expect("age");
+    let age: u32 = age.trim().parse().expect("Please type a number!");
+    age
 }
 
 fn age_guess_match(data: (u32, u32, &str, &str, u32, (u32, u32))) -> (bool, (u32, u32)) {

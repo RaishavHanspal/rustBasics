@@ -2,6 +2,7 @@ use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
 fn main() {
+    start_scene();
     prologue();
 }
 
@@ -44,7 +45,9 @@ fn your_info(host: &str) {
     let mut max_age: u32 = 100;
     let mut trials: u32 = 0;
     const USE_MATCH: bool = false;
-    loop {
+    const LOOP_EQ_FOR_WHILE: bool = true;
+    // ideally we should use "loop"
+    while LOOP_EQ_FOR_WHILE {
         let guess_age: u32 = rand::thread_rng().gen_range(min_age..=max_age);
         println!("[{host}:] Is it {guess_age}?");
         trials = trials + 1;
@@ -111,4 +114,13 @@ fn age_guess_if_else(guess_age: u32, age: u32, mut range: (u32, u32)) -> (bool, 
         }
     }
     return (_stop, range);
+}
+
+fn start_scene() {
+    // loading
+    println!("Scene starts in ");
+    let abc = 1..6;
+    for a in abc.rev() {
+        println!("{a}");
+    }
 }

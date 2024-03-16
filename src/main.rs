@@ -3,18 +3,20 @@ use std::cmp::Ordering;
 use std::io;
 fn main() {
     start_scene();
+    println!("temparature in Fahrenheit: {}", fahrenheit_to_celsius(70));
+    println!("temparature in Celsius: {}", celsius_to_fahrenheit(21));
     prologue();
 }
 
 fn prologue() {
     // using constants we cannot reassign the value, or redeclare
-    const TIME: u32 = 1230;
+    let _time: i32 = get_nth_fibonnaci_number(20);
     // by default we cannot reassign the value, but we can redeclare same name variable
     let name = "Mario";
     // only using mut property we can reassign same variable
     let mut age = 26;
     // string literal '{}' is a must when printing variables/constants
-    println!("Time: {}", TIME);
+    println!("Time: {}", _time);
     println!("[{}:] Hola! Yo Soy {}, I'm {} years old.", name, name, age);
     let mario = name;
     let name = "Luigi";
@@ -126,6 +128,33 @@ fn start_scene() {
     println!("Scene starts in ");
     let abc = 1..6;
     for a in abc.rev() {
-        println!("{a}");
+        print!("{a}...");
+    }
+    println!("...");
+    println!("Scene Started!");
+}
+
+fn fahrenheit_to_celsius(fahrenheit_value: i32) -> i32 {
+    ((fahrenheit_value - 32) * 5) / 9
+}
+
+fn celsius_to_fahrenheit(celsius_value: i32) -> i32 {
+    ((celsius_value * 9) / 5) + 32
+}
+
+fn get_nth_fibonnaci_number(number: i32) -> i32 {
+    if number <= 1 {
+        return number;
+    } else {
+        let mut previous = 0;
+        let mut current = 1;
+        let mut seek = 1;
+        while seek < number {
+            let last = previous; // last = 0 // last = 1
+            previous = current; // prev = 1 // prev = 1
+            current = last + previous; // curr = 1 // curr = 2
+            seek = seek + 1;
+        }
+        return current;
     }
 }
